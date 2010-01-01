@@ -82,12 +82,23 @@ class Hilbert:
     def __init__(self, dimension, order):
         self.dimension, self.order = dimension, order
 
+    def __len__(self):
+        return 2**(self.dimension*self.order)
+
+    def __getitem__(self, idx):
+        if idx >= len(self):
+            raise IndexError
+        return self.point(idx)
+
+    def dimensions(self):
+        """
+            Size of this curve in each dimension.
+        """
+        return [2**(self.dimension*self.order)]*self.dimension
+
     def index(self, p):
         return hilbert_index(self.dimension, self.order, p)
 
     def point(self, idx):
         return hilbert_point(self.dimension, self.order, idx)
-
-
-
 

@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+import os.path, math
+from scurve import draw, hilbert
+
+def main():
+    from optparse import OptionParser, OptionGroup
+    parser = OptionParser(
+                usage = "%prog [options] output",
+                version="%prog 0.1",
+            )
+    parser.add_option("-c", "--color", action="store", dest="color", default="0A2376")
+    parser.add_option(
+        "-s", "--size", action="store",
+        type="int", dest="size", default=100
+    )
+    parser.add_option(
+        "-o", "--order", action="store",
+        type="int", dest="order", default=3
+    )
+    parser.add_option(
+        "-d", "--dotsize", action="store",
+        type="int", dest="dotsize", default=2
+    )
+    parser.add_option(
+        "-m", "--mark", action="append",
+        type="int", dest="mark", default=[]
+    )
+    options, args = parser.parse_args()
+    if len(args) != 1:
+        parser.error("Please specify output file.")
+
+    h = hilbert.Hilbert(2, options.order)
+
+    d = draw.Demo(h, options.size, options.color, options.dotsize, *options.mark)
+    d.draw()
+    d.save(args[0])
+
+main()

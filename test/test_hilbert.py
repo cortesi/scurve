@@ -78,8 +78,23 @@ class uFunctions(libpry.AutoTree):
         assert hilbert.entry(1) == 0
 
 
+class uHilbert(libpry.AutoTree):
+    def test_index(self):
+        h = hilbert.Hilbert(2, 3)
+        assert h.index(h.point(4)) ==  4
+
+    def test_len(self):
+        assert len(hilbert.Hilbert(2, 1)) == 4
+        assert len(hilbert.Hilbert(2, 2)) == 16
+        assert len(hilbert.Hilbert(3, 1)) == 8
+
+    def test_getitem(self):
+        assert len(list(hilbert.Hilbert(2, 1))) == 4
+
+
 tests = [
     uFunctions(),
+    uHilbert()
 ]
 
 
