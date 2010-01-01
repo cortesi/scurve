@@ -91,6 +91,10 @@ class uHilbert(libpry.AutoTree):
     def test_getitem(self):
         assert len(list(hilbert.Hilbert(2, 1))) == 4
 
+    def ttest_bench(self):
+        assert list(hilbert.Hilbert(2, 7))
+
+
 
 tests = [
     uFunctions(),

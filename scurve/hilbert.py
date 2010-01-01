@@ -54,9 +54,9 @@ def hilbert_point(dimension, order, h):
         w = utils.bits2int(w)
         l = utils.graycode(w)
         l = itransform(e, d, dimension, l)
-        l = utils.bits(l, dimension)
         for j in range(dimension):
-            p[j] = utils.setbit(p[j], order, i, l[j])
+            b = 1 if l&2**(dimension-j-1) else 0
+            p[j] = utils.setbit(p[j], order, i, b)
         e = e ^ utils.lrot(entry(w), d+1, dimension)
         d = (d + direction(w, dimension) + 1)%dimension
     return p

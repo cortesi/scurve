@@ -38,7 +38,7 @@ def bits2int(bits):
     """
     n = 0 
     for p, i in enumerate(reversed(bits)):
-        n += i * 2**p
+        n += i*2**p
     return n
 
 
@@ -71,10 +71,10 @@ def tsb(x, width):
         Trailing set bits.     
     """
     assert x < 2**width
-    x = bits(x, width)
-    x.reverse()
-    x.append(0)
-    return x.index(0)
+    for i in range(width):
+        if not x&(2**i):
+            return i
+    return width
 
 
 def setbit(x, w, i, b):
@@ -83,8 +83,9 @@ def setbit(x, w, i, b):
         b must be 1 or 0
     """
     assert b in [1, 0]
-    x = bits(x, w)
-    x[i] = b
-    return bits2int(x)
-
+    assert i < w
+    if b:
+        return x | 2**(w-i-1)
+    else:
+        return x & ~2**(w-i-1)
 
