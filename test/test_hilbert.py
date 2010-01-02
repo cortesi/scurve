@@ -91,6 +91,13 @@ class uHilbert(libpry.AutoTree):
     def test_getitem(self):
         assert len(list(hilbert.Hilbert(2, 1))) == 4
 
+    def test_fromSize(self):
+        h = hilbert.Hilbert(3, 1)
+        h2 = hilbert.Hilbert.fromSize(3, len(h))
+        assert h.dimension == h2.dimension
+        assert h.order == h2.order
+        libpry.raises(ValueError, hilbert.Hilbert.fromSize, 3, 3)
+
     def ttest_bench(self):
         assert list(hilbert.Hilbert(2, 7))
 

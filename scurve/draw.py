@@ -85,3 +85,49 @@ class Demo:
     def save(self, fname):
         self.c.save(fname)
 
+
+
+class Curve:
+    def __init__(self, curve, size, background="FFFFFF", color="000000"):
+        """
+            size:  X and Y dimensions of image.
+            datalen: Length of dataset.
+        """
+        self.curve, self.size = curve, size
+        self.background = parseColor(background)
+        self.color = color
+
+        self.order = 1
+        while (2**(2*(self.order+1)) <= len(curve)):
+            self.order += 1
+
+        self.c = Canvas(self.size, self.size)
+
+        bkg = self.background + [1]
+        self.c.background(*bkg)
+        self.ctx = self.c.ctx()
+        self.ctx.set_source_rgb(*parseColor(color))
+        self.ctx.set_antialias(False)
+
+        # Effective granularity
+        self.bucket = len(curve)/((2**self.order)**2)
+
+    def pixel(self, n, color=None):
+        if color and color != self.color:
+            self.ctx.set_source_rgb(*parseColor(color))
+            self.color = color
+        x, y = self.curve.point(int(n/float(self.bucket)))
+        self.ctx.rectangle(x, y, 1, 1)
+        self.ctx.fill()
+
+    def pixelRange(self, start, end):
+        x = start - start%self.bucket
+        while 1:
+            self.pixel(x)
+            if x >= end:
+                break
+            x += self.bucket
+
+    def save(self, fname):
+        self.c.save(fname)
+

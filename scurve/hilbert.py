@@ -78,9 +78,17 @@ def hilbert_index(dimension, order, p):
     return h
 
 
+
 class Hilbert:
     def __init__(self, dimension, order):
         self.dimension, self.order = dimension, order
+
+    @classmethod
+    def fromSize(self, dimension, size):
+        x = math.log(size, 2)
+        if not x == int(x):
+            raise ValueError("Size does not fit a square Hilbert curve.")
+        return Hilbert(dimension, x/dimension)
 
     def __len__(self):
         return 2**(self.dimension*self.order)
