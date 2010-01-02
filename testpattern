@@ -1,16 +1,21 @@
 #!/usr/bin/env python
 import os.path, math
-from scurve import hilbert
+from scurve import hilbert, progress, zigzag
 import Image, ImageDraw
 
 
-def drawmap(map, csource, name):
+def drawmap(map, csource, name, quiet):
     c = Image.new("RGB", map.dimensions())
     cd = ImageDraw.Draw(c)
     step = len(csource)/float(len(map))
+    if quiet:
+        prog = progress.Dummy()
+    else:
+        prog = progress.Progress(len(map))
     for i, p in enumerate(map):
         color = csource.point(int(i*step))
         cd.point(tuple(p), fill=tuple(color))
+        prog.tick(i)
     c.save(name)
 
 
@@ -32,6 +37,10 @@ def main():
         "-s", "--size", action="store",
         type="int", dest="size", default=512
     )
+    parser.add_option(
+        "-q", "--quiet", action="store_true",
+        dest="quiet", default=False
+    )
     options, args = parser.parse_args()
     if len(args) != 1:
         parser.error("Please specify output file.")
@@ -45,12 +54,14 @@ def main():
 
     if options.map == "hilbert":
         map = hilbert.Hilbert.fromSize(2, options.size*options.size)
-    elif options.colorsource == "zigzag":
+    elif options.map == "zigzag":
         map = zigzag.ZigZag(2, options.size)
     else:
-        parser.error("Unknown color source.")
-    drawmap(map, csource, args[0])
+        parser.error("Unknown map.")
+
+    drawmap(map, csource, args[0], options.quiet)
     
+
 
 main()
 
