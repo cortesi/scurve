@@ -33,6 +33,7 @@ class uZigZag(libpry.AutoTree):
         self.is_traversal(zigzag.ZigZag(1, 3))
         self.is_traversal(zigzag.ZigZag(2, 3))
         self.is_traversal(zigzag.ZigZag(3, 3))
+        self.is_traversal(zigzag.ZigZag(3, 12))
         self.is_traversal(zigzag.ZigZag(4, 3))
         self.is_traversal(zigzag.ZigZag(4, 4))
 
@@ -41,6 +42,7 @@ class uZigZag(libpry.AutoTree):
         self.symmetry(zigzag.ZigZag(2, 3))
         self.symmetry(zigzag.ZigZag(2, 4))
         self.symmetry(zigzag.ZigZag(3, 2))
+        self.symmetry(zigzag.ZigZag(3, 12))
         self.symmetry(zigzag.ZigZag(4, 4))
 
 
@@ -48,4 +50,3 @@ class uZigZag(libpry.AutoTree):
 tests = [
     uZigZag()
 ]
-

@@ -15,7 +15,8 @@ def drawmap(map, csource, name, quiet):
     for i, p in enumerate(map):
         color = csource.point(int(i*step))
         cd.point(tuple(p), fill=tuple(color))
-        prog.tick(i)
+        if not i%100:
+            prog.tick(i)
     c.save(name)
 
 
