@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+import os.path, math
+from scurve import hilbert
+import Image, ImageDraw
+
+
+def drawmap(map, csource, name):
+    c = Image.new("RGB", map.dimensions())
+    cd = ImageDraw.Draw(c)
+    step = len(csource)/float(len(map))
+    for i, p in enumerate(map):
+        color = csource.point(int(i*step))
+        cd.point(tuple(p), fill=tuple(color))
+    c.save(name)
+
+
+def main():
+    from optparse import OptionParser, OptionGroup
+    parser = OptionParser(
+                usage = "%prog [options] output",
+                version="%prog 0.1",
+            )
+    parser.add_option(
+        "-c", "--colorsource", action="store",
+        type="str", dest="colorsource", default="hilbert"
+    )
+    parser.add_option(
+        "-m", "--map", action="store",
+        type="str", dest="map", default="hilbert"
+    )
+    parser.add_option(
+        "-s", "--size", action="store",
+        type="int", dest="size", default=512
+    )
+    options, args = parser.parse_args()
+    if len(args) != 1:
+        parser.error("Please specify output file.")
+
+    if options.colorsource == "hilbert":
+        csource = hilbert.Hilbert.fromSize(3, 256**3)
+    elif options.colorsource == "zigzag":
+        csource = zigzag.ZigZag(3, 256)
+    else:
+        parser.error("Unknown color source.")
+
+    if options.map == "hilbert":
+        map = hilbert.Hilbert.fromSize(2, options.size*options.size)
+    elif options.colorsource == "zigzag":
+        map = zigzag.ZigZag(2, options.size)
+    else:
+        parser.error("Unknown color source.")
+    drawmap(map, csource, args[0])
+    
+
+main()
+

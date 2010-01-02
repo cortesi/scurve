@@ -45,8 +45,6 @@ class uZigZag(libpry.AutoTree):
 
 
 
-
-
 tests = [
     uZigZag()
 ]

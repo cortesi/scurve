@@ -85,10 +85,13 @@ class Hilbert:
 
     @classmethod
     def fromSize(self, dimension, size):
+        """
+            Size is the total number of points in the curve.
+        """
         x = math.log(size, 2)
         if not x == int(x):
             raise ValueError("Size does not fit a square Hilbert curve.")
-        return Hilbert(dimension, x/dimension)
+        return Hilbert(dimension, int(x/dimension))
 
     def __len__(self):
         return 2**(self.dimension*self.order)
@@ -102,7 +105,7 @@ class Hilbert:
         """
             Size of this curve in each dimension.
         """
-        return [2**(self.dimension*self.order)]*self.dimension
+        return [int(len(self)**(1/float(self.dimension)))]*self.dimension
 
     def index(self, p):
         return hilbert_index(self.dimension, self.order, p)
