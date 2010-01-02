@@ -46,16 +46,15 @@ def hilbert_point(dimension, order, h):
     #        h     - order*dimension
     #        l     - dimension
     #        e     - dimension
-    h = utils.bits(h, order*dimension)
+    hwidth = order*dimension
     e, d = 0, 0
     p = [0]*dimension
     for i in range(order):
-        w = h[i*dimension:i*dimension+dimension]
-        w = utils.bits2int(w)
+        w = utils.bitrange(h, hwidth, i*dimension, i*dimension+dimension)
         l = utils.graycode(w)
         l = itransform(e, d, dimension, l)
         for j in range(dimension):
-            b = 1 if l&2**(dimension-j-1) else 0
+            b = utils.bitrange(l, dimension, j, j+1)
             p[j] = utils.setbit(p[j], order, i, b)
         e = e ^ utils.lrot(entry(w), d+1, dimension)
         d = (d + direction(w, dimension) + 1)%dimension
@@ -63,20 +62,19 @@ def hilbert_point(dimension, order, h):
 
 
 def hilbert_index(dimension, order, p):
-    # Hamilton's paper initialises d as 0, which I believe to be an error.
+    # Hamilton's paper initialises d to 0, which appears to be an error.
     h, e, d = 0, 0, 1
-    p = [utils.bits(i, order) for i in p]
     for i in range(order):
-        l = [p[x][i] for x in range(dimension)]
-        l.reverse()
-        l = utils.bits2int(l)
+        l = 0
+        for x in range(dimension):
+            b = utils.bitrange(p[x], order, i, i+1)
+            l |= b<<x
         l = transform(e, d, dimension, l)
         w = utils.igraycode(l)
         e = e ^ utils.lrot(entry(w), d+1, dimension)
         d = (d + direction(w, dimension) + 1)%dimension
         h = (h<<dimension)|w
     return h
-
 
 
 class Hilbert:

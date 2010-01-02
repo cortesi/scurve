@@ -44,6 +44,22 @@ class uFunctions(libpry.AutoTree):
         assert utils.setbit(4, 3, 2, 1) == 5
         assert utils.setbit(4, 3, 0, 0) == 0
 
+    def test_bitrange(self):
+        def checkbit(i, width, start, end, expected):
+            e = utils.bitrange(i, width, start, end)
+            assert e == expected
+            assert e == utils.bits2int(utils.bits(i, width)[start:end])
+
+        checkbit(1, 5, 4, 5, 1)
+        checkbit(2, 5, 4, 5, 0)
+        checkbit(2, 5, 3, 5, 2)
+        checkbit(2, 5, 3, 4, 1)
+        checkbit(3, 5, 3, 5, 3)
+        checkbit(3, 5, 0, 5, 3)
+        checkbit(4, 5, 2, 3, 1)
+        checkbit(4, 5, 2, 4, 2)
+        checkbit(4, 5, 2, 2, 0)
+
 
 
 

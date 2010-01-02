@@ -102,7 +102,9 @@ class uHilbert(libpry.AutoTree):
 
 
     def ttest_bench(self):
-        assert list(hilbert.Hilbert(2, 7))
+        h = hilbert.Hilbert(2, 7)
+        for i in h:
+            h.index(i)
 
 
 

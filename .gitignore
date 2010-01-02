@@ -1,6 +1,7 @@
 build
 *.swp
 *.pyc
+*.pyo
 *.swo
 tmp.*
 tmp

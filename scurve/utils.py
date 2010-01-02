@@ -7,6 +7,7 @@ import math
 def graycode(x):
     return x^(x>>1)
 
+
 def igraycode(x):
     """
         Inverse gray code.
@@ -71,10 +72,11 @@ def tsb(x, width):
         Trailing set bits.     
     """
     assert x < 2**width
-    for i in range(width):
-        if not x&(2**i):
-            return i
-    return width
+    i = 0
+    while x&1 and i <= width:
+        x = x >> 1
+        i += 1
+    return i
 
 
 def setbit(x, w, i, b):
@@ -88,4 +90,15 @@ def setbit(x, w, i, b):
         return x | 2**(w-i-1)
     else:
         return x & ~2**(w-i-1)
+
+
+def bitrange(x, width, start, end):
+    """
+        Extract a bit range as an integer. 
+        (start, end) is inclusive lower bound, exclusive upper bound.
+    """
+    return x >> (width-end) & ((2**(end-start))-1)
+
+
+
 
