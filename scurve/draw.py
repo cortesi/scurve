@@ -48,7 +48,7 @@ class Demo:
         # Assuming all dimension sizes are equal
         self.length = self.curve.dimensions()[0]
         self.marks = set(marks)
-        self.scale = float(size)/(math.sqrt(self.length)-1)
+        self.scale = float(size)/(self.length-1)
 
     def func(self, i, o):
         return xy(i, o)

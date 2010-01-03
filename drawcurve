@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os.path, math
-from scurve import draw, hilbert
+from scurve import draw, hilbert, zigzag
 
 def main():
     from optparse import OptionParser, OptionGroup
@@ -25,14 +25,24 @@ def main():
         "-m", "--mark", action="append",
         type="int", dest="mark", default=[]
     )
+    parser.add_option(
+        "-u", "--curve", action="store",
+        type="str", dest="curve", default="hilbert"
+    )
     options, args = parser.parse_args()
     if len(args) != 1:
         parser.error("Please specify output file.")
 
-    h = hilbert.Hilbert(2, options.order)
+    if options.curve == "hilbert":
+        c = hilbert.Hilbert(2, options.order)
+    elif options.curve == "zigzag":
+        c = zigzag.ZigZag(2, 2**options.order)
+    else:
+        parser.error("Unknown color source.")
 
-    d = draw.Demo(h, options.size, options.color, options.dotsize, *options.mark)
+    d = draw.Demo(c, options.size, options.color, options.dotsize, *options.mark)
     d.draw()
     d.save(args[0])
+
 
 main()

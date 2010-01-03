@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+from scurve import hilbert
+import cubictemp
+
+pov = """
+global_settings { assumed_gamma 2.2 }
+
+camera {
+  location  <0, 50, 15>
+  right <1, 1, 1>
+  look_at   <0, 0, 0>
+}
+
+background { color red 1 green 1 blue 1 }
+
+light_source { <50, 30, 20> color red 1 green 1 blue 1 }
+
+blob {
+  threshold 0.5
+  <!--(for i in lines)-->
+    cylinder { 
+        <@!i[0][0]!@, @!i[0][1]!@, @!i[0][2]!@>, 
+        <@!i[1][0]!@, @!i[1][1]!@, @!i[1][2]!@>, 
+        0.1, 1 
+    }
+    sphere { 
+        <@!i[0][0]!@, @!i[0][1]!@, @!i[0][2]!@>, 
+        0.1, 1 
+    }
+  <!--(end)-->
+    sphere { 
+        <@!lines[0][0][0]!@, @!lines[0][0][1]!@, @!lines[0][0][2]!@>, 
+        0.2, 1 
+        pigment { color red 0 green 1 blue 0 }
+    }
+  pigment { color red 0.5 green 0.5 blue 1 }
+  finish { ambient 0.2 diffuse 0.8 phong 1 }
+  rotate 70*z
+  rotate -180*x
+  rotate -80*y
+  scale 12.5
+}
+"""
+
+f = cubictemp.Template(pov)
+
+def maken(n):
+    lines = []
+    current = None
+    for v in hilbert.Hilbert(3, n):
+        if not current:
+            current = v
+            continue
+        lines.append((current, v))
+        current = v
+    return lines
+
+
+print f(lines=maken(2))
+
