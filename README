@@ -1,0 +1,16 @@
+A collection of algorithms and visualisation tools related to space-filling
+curves.
+
+
+The tools included are:
+
+    cube: Outputs a POV-Ray definition file for drawing 3-dimensional curves.
+
+    drawcurve: Generates two dimensional lines-and-vertexes drawings of
+    space-filling curves.
+
+    gray: Prints a bit representation of the Gray codes of a specified bit
+    width.
+
+    testpattern: Projects a 3-dimensional traversal of the RGB colour cube onto
+    a two-dimensional curve.
