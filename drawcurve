@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os.path, math
-from scurve import draw, hilbert, zigzag
+from scurve import draw, hilbert, zigzag, zorder
 
 def main():
     from optparse import OptionParser, OptionGroup
@@ -37,6 +37,8 @@ def main():
         c = hilbert.Hilbert(2, options.order)
     elif options.curve == "zigzag":
         c = zigzag.ZigZag(2, 2**options.order)
+    elif options.curve == "zorder":
+        c = zorder.ZOrder(2, options.order)
     else:
         parser.error("Unknown color source.")
 

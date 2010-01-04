@@ -1,3 +1,4 @@
+import math
 
 class ZigZag:
     """
@@ -11,6 +12,16 @@ class ZigZag:
             size: The size in each dimension
         """
         self.dimension, self.size = dimension, size
+
+    @classmethod
+    def fromSize(self, dimension, size):
+        """
+            size: total number of points in the curve.
+        """
+        x = math.pow(size, 1/float(dimension))
+        if not x == int(x):
+            raise ValueError("Size does not fit a square ZigZag curve.")
+        return ZigZag(dimension, int(x))
 
     def __len__(self):
         return self.size**self.dimension
