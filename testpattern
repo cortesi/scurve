@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os.path, math
-from scurve import hilbert, progress, zigzag, zorder
+import scurve
+from scurve import progress
 import Image, ImageDraw
 
 
@@ -46,27 +47,9 @@ def main():
     if len(args) != 1:
         parser.error("Please specify output file.")
 
-    if options.colorsource == "hilbert":
-        csource = hilbert.Hilbert.fromSize(3, 256**3)
-    elif options.colorsource == "zigzag":
-        csource = zigzag.ZigZag.fromSize(3, 256**3)
-    elif options.colorsource == "zorder":
-        csource = zorder.ZOrder.fromSize(3, 256**3)
-    else:
-        parser.error("Unknown color source.")
-
-    if options.map == "hilbert":
-        map = hilbert.Hilbert.fromSize(2, options.size*options.size)
-    elif options.map == "zigzag":
-        map = zigzag.ZigZag.fromSize(2, options.size*options.size)
-    elif options.map == "zorder":
-        map = zorder.ZOrder.fromSize(2, options.size*options.size)
-    else:
-        parser.error("Unknown map.")
-
+    csource = scurve.fromSize(options.colorsource, 3, 256**3)
+    map = scurve.fromSize(options.map, 2, options.size**2)
     drawmap(map, csource, args[0], options.quiet)
-    
-
 
 main()
 

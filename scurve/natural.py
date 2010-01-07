@@ -10,7 +10,7 @@ class Natural:
             dimension: Number of dimensions
             size: The size in each dimension
         """
-        self.dimension, self.size = dimension, size
+        self.dimension, self.size = int(dimension), int(size)
 
     @classmethod
     def fromSize(self, dimension, size):
