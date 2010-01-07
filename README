@@ -1,6 +1,17 @@
 A collection of algorithms and visualisation tools related to space-filling
 curves.
 
+The following traversals of all points in a space are supported (some are true
+space-filling curves, some are not):
+    
+    hilbert:    Hilbert curve
+    natural:    A natural-order traversal of all points, where each co-ordinate
+                is simply treated as a digit.
+    zigzag:     A traversal of all points that zig-zags to ensure that each
+                point differs from the previous point by a unit-offset in only one
+                dimension.
+    zorder:     Z-order curve
+
 
 The tools included are:
 
