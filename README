@@ -4,6 +4,9 @@ curves.
 
 The tools included are:
 
+    colorswatch: Creates a swatch with a visual breakdown of the colours
+    contained in a specified image.
+
     cube: Outputs a POV-Ray definition file for drawing 3-dimensional curves.
 
     drawcurve: Generates two dimensional lines-and-vertexes drawings of
@@ -13,4 +16,4 @@ The tools included are:
     width.
 
     testpattern: Projects a 3-dimensional traversal of the RGB colour cube onto
-    a two-dimensional curve.
+    a specified two-dimensional curve.
