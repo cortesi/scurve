@@ -2,6 +2,15 @@
     Some common test routines.
 """
 
+def is_complete(lst):
+    """
+        Does this list of points visit every vertex on the n-dimensional
+        cube once?
+    """
+    lst = [tuple(i) for i in lst]
+    assert len(lst) == len(set(lst))
+
+
 def is_traversal(lst):
     """
         Does this list of points visit every vertex on the n-dimensional
@@ -21,6 +30,7 @@ def is_traversal(lst):
                     diff += 1
             assert diff == 1
         prev = i
+
 
 def symmetry(c):
     l1 = list(c)

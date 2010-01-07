@@ -27,6 +27,10 @@ class uZigZag(libpry.AutoTree):
         assert z.dimension == z2.dimension
         assert z.size == z2.size
 
+        z = zigzag.ZigZag(3, 256)
+        z2 = zigzag.ZigZag.fromSize(3, len(z))
+        assert z.dimension == z2.dimension
+        assert z.size == z2.size
 
 
 tests = [

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os.path, math
-from scurve import hilbert, progress, zigzag, zorder
+from scurve import hilbert, progress, zigzag, zorder, natural
 import Image, ImageDraw
 
 def sortedPixels(csource, img, quiet):
@@ -73,6 +73,8 @@ def main():
         csource = zigzag.ZigZag.fromSize(3, 256**3)
     elif options.colorsource == "zorder":
         csource = zorder.ZOrder.fromSize(3, 256**3)
+    elif options.colorsource == "natural":
+        csource = natural.Natural.fromSize(3, 256**3)
     else:
         parser.error("Unknown color source.")
 
@@ -82,6 +84,8 @@ def main():
         map = zigzag.ZigZag.fromSize(2, options.size*options.size)
     elif options.map == "zorder":
         map = zorder.ZOrder.fromSize(2, options.size*options.size)
+    elif options.map == "natural":
+        map = natural.Natural.fromSize(2, options.size*options.size)
     else:
         parser.error("Unknown map.")
 
