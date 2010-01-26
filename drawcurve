@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os.path, math
-from scurve import draw, hilbert, zigzag, zorder
+import scurve
+from scurve import draw
 
 def main():
     from optparse import OptionParser, OptionGroup
@@ -15,7 +16,13 @@ def main():
     )
     parser.add_option(
         "-o", "--order", action="store",
-        type="int", dest="order", default=3
+        type="int", dest="order", default=None,
+        help = "Order of the curve."
+    )
+    parser.add_option(
+        "-p", "--points", action="store",
+        type="int", dest="points", default=None,
+        help = "Total number of points on the curve."
     )
     parser.add_option(
         "-d", "--dotsize", action="store",
@@ -33,14 +40,12 @@ def main():
     if len(args) != 1:
         parser.error("Please specify output file.")
 
-    if options.curve == "hilbert":
-        c = hilbert.Hilbert(2, options.order)
-    elif options.curve == "zigzag":
-        c = zigzag.ZigZag(2, 2**options.order)
-    elif options.curve == "zorder":
-        c = zorder.ZOrder(2, options.order)
+    if options.order:
+        c = scurve.fromOrder(options.curve, 2, options.order)
+    elif options.points:
+        c = scurve.fromSize(options.curve, 2, options.points)
     else:
-        parser.error("Unknown color source.")
+        parser.error("Must specify either points or order.")
 
     d = draw.Demo(c, options.size, options.color, options.dotsize, *options.mark)
     d.draw()

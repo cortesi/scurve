@@ -1,7 +1,6 @@
 import math
 import utils
 
-
 class GrayCurve:
     def __init__(self, dimension, bits):
         """
@@ -19,8 +18,8 @@ class GrayCurve:
         x = math.log(size, 2)
         bits = x/dimension
         if not bits == int(bits):
-            raise ValueError("Size does not fit a square ZOrder curve.")
-        return ZOrder(dimension, int(bits))
+            raise ValueError("Size does not fit a square Gray curve.")
+        return GrayCurve(dimension, int(bits))
 
     def __len__(self):
         return 2**(self.bits*self.dimension)
@@ -44,9 +43,10 @@ class GrayCurve:
             poff = self.dimension-(i%self.dimension)-1
             b = utils.bitrange(p[poff], self.bits, bitoff, bitoff+1) << i
             idx |= b
-        return idx
+        return utils.igraycode(idx)
 
     def point(self, idx):
+        idx = utils.graycode(idx)
         p = [0]*self.dimension
         iwidth = self.bits * self.dimension
         for i in range(iwidth):
