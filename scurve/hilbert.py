@@ -87,8 +87,8 @@ class Hilbert:
             Size is the total number of points in the curve.
         """
         x = math.log(size, 2)
-        if not x == int(x):
-            raise ValueError("Size does not fit a square Hilbert curve.")
+        if not float(x)/dimension == int(x)/dimension:
+            raise ValueError("Size does not fit Hilbert curve of dimension %s."%dimension)
         return Hilbert(dimension, int(x/dimension))
 
     def __len__(self):

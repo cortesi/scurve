@@ -131,3 +131,32 @@ class Curve:
     def save(self, fname):
         self.c.save(fname)
 
+
+
+class Swatch:
+    def __init__(self, curve, colorwidth, height):
+        """
+            Color swatches from the RGB color cube.
+
+            curve: A curve with dimension 3.
+            colorwidth: Width of an individual color. Image width will be
+            len(curve)*colorwidth.
+            height: Height of the image
+        """
+        self.curve, self.colorwidth, self.height = curve, colorwidth, height
+        self.c = Canvas(len(self.curve) * colorwidth, self.height)
+        self.ctx = self.c.ctx()
+        self.ctx.set_antialias(False)
+
+    def save(self, fname):
+        d = float(self.curve.dimensions()[0])
+        offset = 0
+        for r, g, b in self.curve:
+            self.ctx.set_source_rgb(
+                r/d, g/d, b/d
+            )
+            self.ctx.rectangle(offset, 0, self.colorwidth, self.height)
+            self.ctx.fill()
+            offset += self.colorwidth
+        self.c.save(fname)
+
