@@ -26,9 +26,11 @@ camera {
     location  <50, 50, -200>
     look_at   <0, 0, 0>
     rotate z*270
+    rotate x*25
+    rotate y*10
 }
 
-background { color red 1 green 1 blue 1 }
+background { color red 0 green 0 blue 0 }
 
 light_source { 
     <50, 30, -200> color red 1 green 1 blue 1 
@@ -50,7 +52,7 @@ blob {
     sphere { 
         <@!lines[0][0][0]!@, @!lines[0][0][1]!@, @!lines[0][0][2]!@>, 
         6, 1
-        pigment { color red 0 green 1 blue 0 }
+        pigment { color red 0.5 green 0.5 blue 1 }
     }
   pigment { color red 0.5 green 0.5 blue 1 }
   finish { ambient 0.2 diffuse 0.8 phong 1 }

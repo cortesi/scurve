@@ -11,6 +11,9 @@ def main():
             )
     parser.add_option("-c", "--color", action="store", dest="color", default="0A2376")
     parser.add_option(
+        "-b", "--background", action="store", dest="background", default="FFFFFF"
+    )
+    parser.add_option(
         "-s", "--size", action="store",
         type="int", dest="size", default=100
     )
@@ -47,7 +50,14 @@ def main():
     else:
         parser.error("Must specify either points or order.")
 
-    d = draw.Demo(c, options.size, options.color, options.dotsize, *options.mark)
+    d = draw.Demo(
+            c,
+            options.size,
+            options.color,
+            options.background,
+            options.dotsize,
+            *options.mark
+        )
     d.draw()
     d.save(args[0])
 
