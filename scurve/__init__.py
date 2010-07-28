@@ -1,7 +1,8 @@
-import hilbert, zigzag, zorder, natural, graycurve
+import hilbert, zigzag, zorder, natural, graycurve, hcurve
 
 
 curveMap = {
+    "hcurve": hcurve.Hcurve,
     "hilbert": hilbert.Hilbert,
     "zigzag": zigzag.ZigZag,
     "zorder": zorder.ZOrder,
