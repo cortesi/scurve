@@ -9,7 +9,7 @@ class Canvas:
     def ctx(self):
         return cairo.Context(self.surface)
 
-    def background(self, r, g, b, a):
+    def background(self, r, g, b, a=1):
         c = self.ctx()
         c.set_source_rgba(r, g, b, a)
         c.rectangle(0, 0, self.width, self.height)
@@ -38,11 +38,12 @@ class Demo:
         Draws a 2d curve within a specified square.
     """
     PAD = 5
-    def __init__(self, curve, size, color, dotsize, *marks):
+    def __init__(self, curve, size, color, background, dotsize, *marks):
         self.curve = curve
         self.size, self.color, self.dotsize = size, color, dotsize
+        self.background = background
         self.c = Canvas(size+self.PAD*2, size+self.PAD*2)
-        self.c.background(1, 1, 1, 1)
+        self.c.background(*parseColor(self.background))
         self.ctx = self.c.ctx()
         self.ctx.set_line_width(1)
         # Assuming all dimension sizes are equal
