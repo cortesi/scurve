@@ -103,7 +103,7 @@ class Hilbert:
         """
             Size of this curve in each dimension.
         """
-        return [int(len(self)**(1/float(self.dimension)))]*self.dimension
+        return [math.ceil(len(self)**(1/float(self.dimension)))]*self.dimension
 
     def index(self, p):
         return hilbert_index(self.dimension, self.order, p)
