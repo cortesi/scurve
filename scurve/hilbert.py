@@ -62,12 +62,11 @@ def hilbert_point(dimension, order, h):
 
 
 def hilbert_index(dimension, order, p):
-    # Hamilton's paper initialises d to 0, which appears to be an error.
-    h, e, d = 0, 0, 1
+    h, e, d = 0, 0, 0
     for i in range(order):
         l = 0
         for x in range(dimension):
-            b = utils.bitrange(p[x], order, i, i+1)
+            b = utils.bitrange(p[dimension-x-1], order, i, i+1)
             l |= b<<x
         l = transform(e, d, dimension, l)
         w = utils.igraycode(l)

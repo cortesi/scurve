@@ -58,10 +58,11 @@ class uFunctions(libpry.AutoTree):
         assert hilbert.transform(3, 0, 2, 1) == 1
 
     def test_hilbert_point(self):
-        n, m = 2, 3
-        for i in range(2**(n*m)):
-            v = hilbert.hilbert_point(n, m, i)
-            assert i == hilbert.hilbert_index(n, m, v)
+        for n in [2, 3, 4]:
+            m = 3
+            for i in range(2**(n*m)):
+                v = hilbert.hilbert_point(n, m, i)
+                assert i == hilbert.hilbert_index(n, m, v)
 
     def test_hilbert_index(self):
         # From the example on p 18 of Hamilton
@@ -99,7 +100,6 @@ class uHilbert(libpry.AutoTree):
         assert h.dimension == h2.dimension
         assert h.order == h2.order
         libpry.raises(ValueError, hilbert.Hilbert.fromSize, 3, 3)
-
 
     def ttest_bench(self):
         h = hilbert.Hilbert(2, 7)
