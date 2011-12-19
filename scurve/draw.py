@@ -23,7 +23,7 @@ class Canvas:
 def parseColor(c):
     """
         Parse an HTML-style color specification
-    """ 
+    """
     if len(c) == 6:
         r = int(c[0:2], 16)/255.0
         g = int(c[2:4], 16)/255.0
@@ -92,7 +92,6 @@ class Curve:
     def __init__(self, curve, size, background="FFFFFF", color="000000"):
         """
             size:  X and Y dimensions of image.
-            datalen: Length of dataset.
         """
         self.curve, self.size = curve, size
         self.background = parseColor(background)

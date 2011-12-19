@@ -15,7 +15,7 @@ def itransform(entry, direction, width, x):
     assert entry < 2**width
     return utils.lrot(x, direction+1, width)^entry
     # There is an error in the Hamilton paper's formulation of the inverse
-    # transform in Lemma 2.12. The correct restatement as a transform is as follows: 
+    # transform in Lemma 2.12. The correct restatement as a transform is as follows:
     #return transform(rrot(entry, direction+1, width), width-direction-2, width, x)
 
 
@@ -102,7 +102,7 @@ class Hilbert:
         """
             Size of this curve in each dimension.
         """
-        return [math.ceil(len(self)**(1/float(self.dimension)))]*self.dimension
+        return [int(math.ceil(len(self)**(1/float(self.dimension))))]*self.dimension
 
     def index(self, p):
         return hilbert_index(self.dimension, self.order, p)

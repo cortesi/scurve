@@ -37,7 +37,7 @@ def bits2int(bits):
     """
         Convert a list of bits to an integer.
     """
-    n = 0 
+    n = 0
     for p, i in enumerate(reversed(bits)):
         n += i*2**p
     return n
@@ -69,7 +69,7 @@ def lrot(x, i, width):
 
 def tsb(x, width):
     """
-        Trailing set bits.     
+        Trailing set bits.
     """
     assert x < 2**width
     i = 0
@@ -81,7 +81,7 @@ def tsb(x, width):
 
 def setbit(x, w, i, b):
     """
-        Sets bit i in an integer x of width w to b. 
+        Sets bit i in an integer x of width w to b.
         b must be 1 or 0
     """
     assert b in [1, 0]
@@ -94,7 +94,7 @@ def setbit(x, w, i, b):
 
 def bitrange(x, width, start, end):
     """
-        Extract a bit range as an integer. 
+        Extract a bit range as an integer.
         (start, end) is inclusive lower bound, exclusive upper bound.
     """
     return x >> (width-end) & ((2**(end-start))-1)
