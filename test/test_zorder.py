@@ -10,12 +10,12 @@ class uZOrder(libpry.AutoTree):
 
     def test_point(self):
         z = zorder.ZOrder(2, 2)
-        assert z.point(utils.bits2int([0, 1, 0, 1])) == [0, 3]
+        assert z.point(utils.bits2int([0, 1, 0, 1])) == [3, 0]
         assert z.point(utils.bits2int([0, 0, 0, 0])) == [0, 0]
-        assert z.point(utils.bits2int([1, 0, 0, 0])) == [2, 0]
-        assert z.point(utils.bits2int([1, 0, 1, 0])) == [3, 0]
+        assert z.point(utils.bits2int([1, 0, 0, 0])) == [0, 2]
+        assert z.point(utils.bits2int([1, 0, 1, 0])) == [0, 3]
         assert z.point(utils.bits2int([1, 1, 1, 1])) == [3, 3]
-            
+
         z = zorder.ZOrder(2, 3)
         assert z.point(utils.bits2int([1, 1, 1, 1, 1, 1])) == [7, 7]
 

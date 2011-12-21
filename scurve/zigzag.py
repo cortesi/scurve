@@ -40,7 +40,7 @@ class ZigZag:
     def index(self, p):
         idx = 0
         flip = False
-        for power, i in enumerate(p):
+        for power, i in enumerate(reversed(list(p))):
             power = self.dimension-power-1
             if flip:
                 fi = self.size-i-1
@@ -64,4 +64,4 @@ class ZigZag:
             p.append(v)
             if v%2:
                 flip = not flip
-        return p
+        return reversed(p)

@@ -35,10 +35,10 @@ class Progress(Inplace):
     def __init__(self, target, title="", width=40, stream=sys.stderr):
         Inplace.__init__(self, title, stream=stream)
         self.width, self.target = width, target
-        self.prev = -1 
+        self.prev = -1
         self.startTime = None
         self.window = None
-            
+
     def tick(self, val):
         if not self.stream:
             return
@@ -65,6 +65,9 @@ class Progress(Inplace):
             )
             Inplace.tick(self, s)
 
+    def set_target(self, t):
+        self.target = t
+
     def restoreTerm(self):
         if self.window:
             #begin nocover
@@ -86,9 +89,10 @@ class Progress(Inplace):
 
 
 class Dummy:
-    def __init__(self, *args, **kwargs): pass 
+    def __init__(self, *args, **kwargs): pass
     def tick(self, *args, **kwargs): pass
     def restoreTerm(self, *args, **kwargs): pass
     def clear(self, *args, **kwargs): pass
     def full(self, *args, **kwargs): pass
+    def set_target(self, *args, **kwargs): pass
 

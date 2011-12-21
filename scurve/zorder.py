@@ -40,6 +40,7 @@ class ZOrder:
         return [2**self.bits]*self.dimension
 
     def index(self, p):
+        p.reverse()
         idx = 0
         iwidth = self.bits * self.dimension
         for i in range(iwidth):
@@ -55,4 +56,5 @@ class ZOrder:
         for i in range(iwidth):
             b = utils.bitrange(idx, iwidth, i, i+1) << (iwidth-i-1)/self.dimension
             p[i%self.dimension] |= b
+        p.reverse()
         return p

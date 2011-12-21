@@ -1,0 +1,137 @@
+#!/usr/bin/env python
+import os.path, math, string
+import scurve
+from scurve import progress
+import Image, ImageDraw
+
+
+class CharHilbert:
+    def __init__(self, data):
+        self.data = data
+        self.csource = scurve.fromSize("hilbert", 3, 256**3)
+        self.step = len(self.csource)/float(256)
+
+    def __len__(self):
+        return len(self.data)
+
+    def point(self, x):
+        c = ord(self.data[x])
+        return self.csource.point(int(c*self.step))
+
+
+
+class CharClass:
+    def __init__(self, data):
+        self.data = data
+
+    def __len__(self):
+        return len(self.data)
+
+    def point(self, x):
+        c = ord(self.data[x])
+        if c == 0:
+            return [0, 0, 0]
+        elif c == 255:
+            return [255, 255, 255]
+        elif chr(c) in string.printable:
+            return [55, 126, 184]
+        return [228, 26, 28]
+
+
+def drawmap_unrolled(map, size, csource, name, prog):
+    prog.set_target((size**2)*4)
+    map = scurve.fromSize(map, 2, size**2)
+    c = Image.new("RGB", (size, size*4))
+    cd = ImageDraw.Draw(c)
+    step = len(csource)/float(len(map)*4)
+
+    sofar = 0
+    for quad in range(4):
+        for i, p in enumerate(map):
+            off = (i + (quad * size**2))
+            color = csource.point(
+                        int(off * step)
+                    )
+            x, y = tuple(p)
+            cd.point(
+                (x, y + (size * quad)),
+                fill=tuple(color)
+            )
+            if not sofar%100:
+                prog.tick(sofar)
+            sofar += 1
+    c.save(name)
+
+
+def drawmap_square(map, size, csource, name, prog):
+    prog.set_target((size**2))
+    map = scurve.fromSize(map, 2, size**2)
+    c = Image.new("RGB", map.dimensions())
+    cd = ImageDraw.Draw(c)
+    step = len(csource)/float(len(map))
+    for i, p in enumerate(map):
+        color = csource.point(int(i*step))
+        cd.point(tuple(p), fill=tuple(color))
+        if not i%100:
+            prog.tick(i)
+    c.save(name)
+
+
+def main():
+    from optparse import OptionParser, OptionGroup
+    parser = OptionParser(
+                usage = "%prog [options] infile output",
+                version="%prog 0.1",
+            )
+    parser.add_option(
+        "-c", "--color", action="store",
+        type="choice", dest="color", default="class",
+        choices=["class", "hilbert"]
+    )
+    parser.add_option(
+        "-m", "--map", action="store",
+        type="str", dest="map", default="hilbert"
+    )
+    parser.add_option(
+        "-s", "--size", action="store",
+        type="int", dest="size", default=None
+    )
+    parser.add_option(
+        "-t", "--type", type="choice",
+        dest="type", default="unrolled",
+        choices=["unrolled", "square"]
+    )
+    parser.add_option(
+        "-q", "--quiet", action="store_true",
+        dest="quiet", default=False
+    )
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error("Please specify input and output file.")
+
+    d = file(args[0]).read()
+    if options.size:
+        size = options.size
+    else:
+        size = int(math.ceil(math.sqrt(len(d))))
+
+    if options.color == "class":
+        csource = CharClass(d)
+    else:
+        csource = CharHilbert(d)
+
+    if options.quiet:
+        prog = progress.Dummy()
+    else:
+        prog = progress.Progress(None)
+
+    if options.type == "unrolled":
+        drawmap_unrolled(options.map, size, csource, args[1], prog)
+    elif options.type == "square":
+        drawmap_square(options.map, size, csource, args[1], prog)
+    prog.clear()
+
+
+
+main()
+
