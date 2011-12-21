@@ -1,7 +1,6 @@
 from distutils.core import setup
 
-version = "0.1"
-
+version = "0.2"
 setup(
         name = "scurve",
         version = version,
@@ -9,5 +8,5 @@ setup(
         author = "Aldo Cortesi",
         author_email = "aldo@corte.si",
         packages = ["scurve"],
-        scripts = ["colormap", "cube", "drawcurve", "gray", "testpattern"],
+        scripts = ["colormap", "cube", "drawcurve", "gray", "testpattern", "binvis"],
 )
