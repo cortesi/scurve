@@ -19,7 +19,6 @@ class CharHilbert:
         return self.csource.point(int(c*self.step))
 
 
-
 class CharClass:
     def __init__(self, data):
         self.data = data
@@ -132,6 +131,4 @@ def main():
     prog.clear()
 
 
-
 main()
-
