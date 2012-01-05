@@ -154,10 +154,13 @@ def main():
     if len(args) == 2:
         dst = args[1]
     else:
-        dst = os.path.basename(args[0]) + options.suffix + ".png"
+        base = os.path.basename(args[0])
+        if "." in base:
+            base, _ = base.rsplit(".", 1)
+        dst = base + options.suffix + ".png"
 
     if os.path.exists(dst):
-        print >> sys.stderr, "Refusing to over-write %s"%dst
+        print >> sys.stderr, "Refusing to over-write '%s'. Specify explicitly if you really want to do this."%dst
         sys.exit(1)
 
     block = None
