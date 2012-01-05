@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os.path, math, string
+import os.path, math, string, sys
 import scurve
 from scurve import progress, utils, draw
 import Image, ImageDraw
@@ -155,6 +155,10 @@ def main():
         dst = args[1]
     else:
         dst = os.path.basename(args[0]) + options.suffix + ".png"
+
+    if os.path.exists(dst):
+        print >> sys.stderr, "Refusing to over-write %s"%dst
+        sys.exit(1)
 
     block = None
     if options.block:
