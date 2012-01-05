@@ -1,32 +1,37 @@
 #!/usr/bin/env python
 import os.path, math, string
 import scurve
-from scurve import progress
+from scurve import progress, utils, draw
 import Image, ImageDraw
 
 
-class CharHilbert:
-    def __init__(self, data):
-        self.data = data
-        self.csource = scurve.fromSize("hilbert", 3, 256**3)
-        self.step = len(self.csource)/float(256)
+class _Color:
+    def __init__(self, data, block):
+        self.data, self.block = data, block
 
     def __len__(self):
         return len(self.data)
 
     def point(self, x):
+        if self.block and (self.block[0]<=x<self.block[1]):
+            return self.block[2]
+        else:
+            return self.getPoint(x)
+
+
+class ColorHilbert(_Color):
+    def __init__(self, data, block):
+        _Color.__init__(data, block)
+        self.csource = scurve.fromSize("hilbert", 3, 256**3)
+        self.step = len(self.csource)/float(256)
+
+    def getPoint(self, x):
         c = ord(self.data[x])
         return self.csource.point(int(c*self.step))
 
 
-class CharClass:
-    def __init__(self, data):
-        self.data = data
-
-    def __len__(self):
-        return len(self.data)
-
-    def point(self, x):
+class ColorClass(_Color):
+    def getPoint(self, x):
         c = ord(self.data[x])
         if c == 0:
             return [0, 0, 0]
@@ -35,6 +40,23 @@ class CharClass:
         elif chr(c) in string.printable:
             return [55, 126, 184]
         return [228, 26, 28]
+
+
+class ColorEntropy(_Color):
+    def getPoint(self, x):
+        e = utils.entropy(self.data, 256, x)
+        def curve(v):
+            f = (4*v - 4*v**2)**4
+            f = max(f, 0)
+            return f
+        r = curve(e-0.5) if e > 0.5 else 0
+        b = e**2
+        return [
+            # http://www.wolframalpha.com/input/?i=plot+%284%28x-0.5%29-4%28x-0.5%29**2%29**4+from+0.5+to+1
+            int(255*r),
+            0,
+            int(255*b)
+        ]
 
 
 def drawmap_unrolled(map, size, csource, name, prog):
@@ -79,55 +101,94 @@ def drawmap_square(map, size, csource, name, prog):
 def main():
     from optparse import OptionParser, OptionGroup
     parser = OptionParser(
-                usage = "%prog [options] infile output",
+                usage = "%prog [options] infile [output]",
                 version="%prog 0.1",
             )
     parser.add_option(
+        "-b", "--block", action="store",
+        dest="block", default=None,
+        help="Mark a block of data with a specified color. Format: hexstartaddr:hexendaddr[:hexcolor]"
+    )
+    parser.add_option(
         "-c", "--color", action="store",
         type="choice", dest="color", default="class",
-        choices=["class", "hilbert"]
+        choices=["class", "hilbert", "entropy"],
+        help="Color map."
     )
     parser.add_option(
         "-m", "--map", action="store",
-        type="str", dest="map", default="hilbert"
+        type="choice", dest="map", default="hilbert",
+        choices=sorted(scurve.curveMap.keys()),
+        help="Pixel layout map. Can be any supported curve."
+    )
+    parser.add_option(
+        "-n", "--namesuffix", action="store",
+        type="str", dest="suffix", default="",
+        help="Suffix for generated file names. Ignored if destination is specified."
+    )
+    parser.add_option(
+        "-p", "--progress", action="store_true", default=False,
+        dest="progress",
+        help="Don't show progress bar - print the destination file name."
     )
     parser.add_option(
         "-s", "--size", action="store",
-        type="int", dest="size", default=None
+        type="int", dest="size", default=256,
+        help="Image width in pixels."
     )
     parser.add_option(
         "-t", "--type", type="choice",
         dest="type", default="unrolled",
-        choices=["unrolled", "square"]
+        choices=["unrolled", "square"],
+        help="Image aspect ratio - square (1x1) or unrolled (1x4)"
     )
     parser.add_option(
         "-q", "--quiet", action="store_true",
         dest="quiet", default=False
     )
     options, args = parser.parse_args()
-    if len(args) != 2:
+    if len(args) not in [1, 2]:
         parser.error("Please specify input and output file.")
 
     d = file(args[0]).read()
-    if options.size:
-        size = options.size
+    if len(args) == 2:
+        dst = args[1]
     else:
-        size = int(math.ceil(math.sqrt(len(d))))
+        dst = os.path.basename(args[0]) + options.suffix + ".png"
+
+    block = None
+    if options.block:
+        parts = options.block.split(":")
+        if len(parts) not in [2, 3]:
+            raise ValueError("Invalid block specification.")
+        s, e = int(parts[0], 16), int(parts[1], 16)
+        if len(parts) == 3:
+            c = draw.parseColor(parts[2])
+        else:
+            c = [255, 0, 0]
+        block = (s, e, c)
 
     if options.color == "class":
-        csource = CharClass(d)
+        csource = ColorClass(d, block)
+    elif options.color == "hilbert":
+        csource = ColorHilbert(d, block)
     else:
-        csource = CharHilbert(d)
+        csource = ColorEntropy(d, block)
 
-    if options.quiet:
+
+    if options.progress:
+        print dst
+
+    if options.quiet or options.progress:
         prog = progress.Dummy()
     else:
         prog = progress.Progress(None)
 
+
     if options.type == "unrolled":
-        drawmap_unrolled(options.map, size, csource, args[1], prog)
+        drawmap_unrolled(options.map, options.size, csource, dst, prog)
     elif options.type == "square":
-        drawmap_square(options.map, size, csource, args[1], prog)
+        drawmap_square(options.map, options.size, csource, dst, prog)
     prog.clear()
 
 

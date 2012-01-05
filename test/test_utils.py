@@ -60,6 +60,11 @@ class uFunctions(libpry.AutoTree):
         checkbit(4, 5, 2, 4, 2)
         checkbit(4, 5, 2, 2, 0)
 
+    def test_entropy(self):
+        libpry.raises(ValueError, utils.entropy, "foo", 64, 0)
+        assert utils.entropy("a"*64, 64, 1) == 0
+        d = "".join([chr(i) for i in range(256)])
+        assert utils.entropy(d, 64, 1) == 1
 
 
 

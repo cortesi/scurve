@@ -100,5 +100,29 @@ def bitrange(x, width, start, end):
     return x >> (width-end) & ((2**(end-start))-1)
 
 
+def entropy(data, blocksize, offset):
+    """
+        Returns local byte entropy for a location in a file.
+    """
+    if len(data) < blocksize:
+        raise ValueError, "Data length must be larger than block size."
+    if offset < blocksize/2:
+        start = 0
+    elif offset > len(data)-blocksize/2:
+        start = len(data)-blocksize/2
+    else:
+        start = offset-blocksize/2
+    hist = {}
+    for i in data[start:start+blocksize]:
+        hist[i] = hist.get(i, 0) + 1
+    base = min(blocksize, 256)
+    entropy = 0
+    for i in hist.values():
+        p = i/float(blocksize)
+        # If blocksize < 256, the number of possible byte values is restricted.
+        # In that case, we adjust the log base to make sure we get a value
+        # between 0 and 1.
+        entropy += (p * math.log(p, base))
+    return -entropy
 
 
