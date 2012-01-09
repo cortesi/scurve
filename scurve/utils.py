@@ -100,7 +100,7 @@ def bitrange(x, width, start, end):
     return x >> (width-end) & ((2**(end-start))-1)
 
 
-def entropy(data, blocksize, offset):
+def entropy(data, blocksize, offset, symbols=256):
     """
         Returns local byte entropy for a location in a file.
     """
@@ -115,7 +115,7 @@ def entropy(data, blocksize, offset):
     hist = {}
     for i in data[start:start+blocksize]:
         hist[i] = hist.get(i, 0) + 1
-    base = min(blocksize, 256)
+    base = min(blocksize, symbols)
     entropy = 0
     for i in hist.values():
         p = i/float(blocksize)
@@ -124,5 +124,3 @@ def entropy(data, blocksize, offset):
         # between 0 and 1.
         entropy += (p * math.log(p, base))
     return -entropy
-
-

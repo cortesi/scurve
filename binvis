@@ -8,6 +8,9 @@ import Image, ImageDraw
 class _Color:
     def __init__(self, data, block):
         self.data, self.block = data, block
+        s = list(set(data))
+        s.sort()
+        self.symbol_map = {v : i for (i, v) in enumerate(s)}
 
     def __len__(self):
         return len(self.data)
@@ -23,10 +26,10 @@ class ColorHilbert(_Color):
     def __init__(self, data, block):
         _Color.__init__(self, data, block)
         self.csource = scurve.fromSize("hilbert", 3, 256**3)
-        self.step = len(self.csource)/float(256)
+        self.step = len(self.csource)/float(len(self.symbol_map))
 
     def getPoint(self, x):
-        c = ord(self.data[x])
+        c = self.symbol_map[self.data[x]]
         return self.csource.point(int(c*self.step))
 
 
@@ -44,7 +47,8 @@ class ColorClass(_Color):
 
 class ColorEntropy(_Color):
     def getPoint(self, x):
-        e = utils.entropy(self.data, 256, x)
+        e = utils.entropy(self.data, 256, x, len(self.symbol_map))
+        # http://www.wolframalpha.com/input/?i=plot+%284%28x-0.5%29-4%28x-0.5%29**2%29**4+from+0.5+to+1
         def curve(v):
             f = (4*v - 4*v**2)**4
             f = max(f, 0)
@@ -52,7 +56,6 @@ class ColorEntropy(_Color):
         r = curve(e-0.5) if e > 0.5 else 0
         b = e**2
         return [
-            # http://www.wolframalpha.com/input/?i=plot+%284%28x-0.5%29-4%28x-0.5%29**2%29**4+from+0.5+to+1
             int(255*r),
             0,
             int(255*b)
@@ -159,7 +162,7 @@ def main():
             base, _ = base.rsplit(".", 1)
         dst = base + options.suffix + ".png"
 
-    if os.path.exists(dst):
+    if os.path.exists(dst) and len(args) < 2:
         print >> sys.stderr, "Refusing to over-write '%s'. Specify explicitly if you really want to do this."%dst
         sys.exit(1)
 
