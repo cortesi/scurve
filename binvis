@@ -22,6 +22,16 @@ class _Color:
             return self.getPoint(x)
 
 
+class ColorGradient(_Color):
+    def getPoint(self, x):
+        c = ord(self.data[x])/255.0
+        return [
+            int(255*c),
+            int(255*c),
+            int(255*c)
+        ]
+
+
 class ColorHilbert(_Color):
     def __init__(self, data, block):
         _Color.__init__(self, data, block)
@@ -115,7 +125,7 @@ def main():
     parser.add_option(
         "-c", "--color", action="store",
         type="choice", dest="color", default="class",
-        choices=["class", "hilbert", "entropy"],
+        choices=["class", "hilbert", "entropy", "gradient"],
         help="Color map."
     )
     parser.add_option(
@@ -182,6 +192,8 @@ def main():
         csource = ColorClass(d, block)
     elif options.color == "hilbert":
         csource = ColorHilbert(d, block)
+    elif options.color == "gradient":
+        csource = ColorGradient(d, block)
     else:
         csource = ColorEntropy(d, block)
 
