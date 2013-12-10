@@ -6,3 +6,4 @@ build
 *.swo
 tmp.*
 tmp
+.coverage

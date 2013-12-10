@@ -1,9 +1,9 @@
 import math
-import libpry
 from scurve import hilbert, utils
+import tutils
 
 
-class uFunctions(libpry.AutoTree):
+class TestFunctions:
     def ispow2(self, i):
         """
             Is i a power of two?
@@ -79,7 +79,7 @@ class uFunctions(libpry.AutoTree):
         assert hilbert.entry(1) == 0
 
 
-class uHilbert(libpry.AutoTree):
+class TestHilbert:
     def test_index(self):
         h = hilbert.Hilbert(2, 3)
         assert h.index(h.point(4)) ==  4
@@ -99,18 +99,11 @@ class uHilbert(libpry.AutoTree):
         h2 = hilbert.Hilbert.fromSize(3, len(h))
         assert h.dimension == h2.dimension
         assert h.order == h2.order
-        libpry.raises(ValueError, hilbert.Hilbert.fromSize, 3, 3)
+        tutils.raises(ValueError, hilbert.Hilbert.fromSize, 3, 3)
 
     def ttest_bench(self):
         h = hilbert.Hilbert(2, 7)
         for i in h:
             h.index(i)
-
-
-
-tests = [
-    uFunctions(),
-    uHilbert()
-]
 
 

@@ -1,9 +1,8 @@
-import libpry
 from scurve import zorder, utils
 import tutils
 
 
-class uZOrder(libpry.AutoTree):
+class TestZOrder:
     def test_dimensions(self):
         z = zorder.ZOrder(2, 2)
         assert z.dimensions()[0] == (2**2)
@@ -33,8 +32,3 @@ class uZOrder(libpry.AutoTree):
         assert z.dimension == z2.dimension
         assert z.bits == z2.bits
 
-
-
-tests = [
-    uZOrder()
-]

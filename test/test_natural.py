@@ -1,9 +1,8 @@
-import libpry
 from scurve import natural, utils
 import tutils
 
 
-class uNatural(libpry.AutoTree):
+class TestNatural:
     def test_point(self):
         tutils.is_complete(natural.Natural(1, 1))
         tutils.is_complete(natural.Natural(1, 3))
@@ -33,7 +32,3 @@ class uNatural(libpry.AutoTree):
         assert z.size == z2.size
 
 
-
-tests = [
-    uNatural()
-]

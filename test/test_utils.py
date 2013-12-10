@@ -1,7 +1,7 @@
 from scurve import utils
-import libpry
+import tutils
 
-class uFunctions(libpry.AutoTree):
+class TestFunctions:
     def test_bits2int(self):
         assert utils.bits2int([0, 0, 1]) == 1
         assert utils.bits2int([0, 1, 1]) == 3
@@ -61,14 +61,8 @@ class uFunctions(libpry.AutoTree):
         checkbit(4, 5, 2, 2, 0)
 
     def test_entropy(self):
-        libpry.raises(ValueError, utils.entropy, "foo", 64, 0)
+        tutils.raises(ValueError, utils.entropy, "foo", 64, 0)
         assert utils.entropy("a"*64, 64, 1) == 0
         d = "".join([chr(i) for i in range(256)])
         assert utils.entropy(d, 64, 1) == 1
-
-
-
-tests = [
-    uFunctions()
-]
 

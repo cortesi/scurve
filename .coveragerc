@@ -1,0 +1,5 @@
+[rum]
+branch = True
+
+[report]
+include = scurve/*

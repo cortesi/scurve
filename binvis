@@ -57,7 +57,7 @@ class ColorClass(_Color):
 
 class ColorEntropy(_Color):
     def getPoint(self, x):
-        e = utils.entropy(self.data, 256, x, len(self.symbol_map))
+        e = utils.entropy(self.data, 32, x, len(self.symbol_map))
         # http://www.wolframalpha.com/input/?i=plot+%284%28x-0.5%29-4%28x-0.5%29**2%29**4+from+0.5+to+1
         def curve(v):
             f = (4*v - 4*v**2)**4

@@ -1,9 +1,8 @@
-import libpry
 from scurve import zigzag, utils
 import tutils
 
 
-class uZigZag(libpry.AutoTree):
+class TestZigZag:
     def test_point(self):
         tutils.is_traversal(zigzag.ZigZag(1, 1))
         tutils.is_traversal(zigzag.ZigZag(1, 3))
@@ -32,7 +31,3 @@ class uZigZag(libpry.AutoTree):
         assert z.dimension == z2.dimension
         assert z.size == z2.size
 
-
-tests = [
-    uZigZag()
-]

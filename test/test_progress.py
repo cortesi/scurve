@@ -1,8 +1,7 @@
 import scurve.progress as progress
-import libpry
 import StringIO
 
-class uInplace(libpry.AutoTree):
+class TestInplace:
     def test_basic(self):
         s = StringIO.StringIO()
         c = progress.Inplace(stream=s)
@@ -20,7 +19,7 @@ class uInplace(libpry.AutoTree):
         c.clear()
 
 
-class uProgress(libpry.AutoTree):
+class TestProgress:
     def test_basic(self):
         s = StringIO.StringIO()
         p = progress.Progress(100, stream=s)
@@ -30,9 +29,3 @@ class uProgress(libpry.AutoTree):
         assert p.prev == 0.5
         p.full()
         assert p.prev == 1.0
-
-
-tests = [
-    uInplace(),
-    uProgress()
-]
