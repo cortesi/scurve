@@ -1,6 +1,8 @@
 A collection of algorithms and visualisation tools related to space-filling
 curves.
 
+# See [binvis.io](http://binvis.io) for my more recent interactive binary visualisation tool
+
 # The Curves 
 
 The following traversals of all points in a space are supported (some are true
